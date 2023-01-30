@@ -1,6 +1,7 @@
-// Choisir l'endroit où afficher nos produits sur la page d'accueil, ici dans la section identifiée par "items".
-const sectionItems = document.querySelector("#items");
-// Récupération de toutes les données de l'API pour les stocker dans une constante listProducts.
+// Variable articleItems, qui a pour fonction de stocker l'article avec son ID propre dans "#items".
+const articleItems = document.querySelector("#items");
+// utilisation de la fonction fetch() pour récuperer les données de l'API, then((response) => response.json()) extrait les données JSON.
+// .then((data) => cree les elements HTML pour chaque produit. élément produit est créé en utilisant les méthodes createElement() et setAttribute().
 fetch("http://localhost:3000/api/products")
   .then((response) => response.json())
   .then((data) => {
@@ -9,7 +10,7 @@ fetch("http://localhost:3000/api/products")
 
       let newA = document.createElement("a");
       newA.setAttribute("href", `./product.html?id=${listProducts._id}`);
-      sectionItems.appendChild(newA);
+      articleItems.appendChild(newA);
 
       let newArticle = document.createElement("article");
       newA.appendChild(newArticle);
@@ -30,9 +31,10 @@ fetch("http://localhost:3000/api/products")
       newArticle.appendChild(newP);
     }
   })
+  // Utilisation de la méthode catch() en cas d'echec de la fonction fetch() ce qui afficheras un message d'alerte. 
   .catch((err) => {
     alert(
-      `Désolé, il semble qu'il y ait eu une erreur lors du chargement du produit demandé. Veuillez vérifier votre connexion internet ou réessayer plus tard.`
+      `Désolé, il semble qu'il y ait eu un problème lors du chargement du produit demandé. Veuillez vérifier votre connexion Internet ou réessayer plus tard. Si le problème persiste, veuillez nous contacter pour obtenir de l'assistance.`
     );
     console.log("Erreur Fetch index.js", err);
   });
