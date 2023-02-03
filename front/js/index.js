@@ -4,30 +4,30 @@ const articleItems = document.querySelector("#items");
 // .then((data) => cree les elements HTML pour chaque produit. élément produit est créé en utilisant les méthodes createElement() et setAttribute().
 fetch("http://localhost:3000/api/products")
   .then((response) => response.json())
-  .then((data) => {
-    for (const listProducts of data) {
-      console.log(listProducts);
+  .then((products) => {
+    for (const product of products) {
+      console.log(product);
 
       let newA = document.createElement("a");
-      newA.setAttribute("href", `./product.html?id=${listProducts._id}`);
+      newA.setAttribute("href", `./product.html?id=${product._id}`);
       articleItems.appendChild(newA);
 
       let newArticle = document.createElement("article");
       newA.appendChild(newArticle);
 
       let newImg = document.createElement("img");
-      newImg.setAttribute("src", listProducts.imageUrl);
-      newImg.setAttribute("alt", listProducts.altTxt);
+      newImg.setAttribute("src", product.imageUrl);
+      newImg.setAttribute("alt", product.altTxt);
       newArticle.appendChild(newImg);
 
       let newH3 = document.createElement("h3");
       newH3.setAttribute("class", "productName");
-      newH3.innerText = listProducts.name;
+      newH3.innerText = product.name;
       newArticle.appendChild(newH3);
 
       let newP = document.createElement("p");
       newP.setAttribute("class", "productDescription");
-      newP.innerText = listProducts.description;
+      newP.innerText = product.description;
       newArticle.appendChild(newP);
     }
   })
