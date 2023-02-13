@@ -47,9 +47,10 @@ function displayproduct(product) {
     select.appendChild(option);
   });
 }
+
 function addProductEvent(product) {
   const buttonPanier = document.querySelector("#addToCart");
-
+  const select = document.getElementById("colors");
   buttonPanier.addEventListener("click", (event) => {
     event.preventDefault();
     
@@ -60,10 +61,7 @@ function addProductEvent(product) {
     const choiceQuantity = Number(quantity.value);
     console.log(choiceQuantity);
     // vérification choiceColor n'est pas une chaîne vide, choiceQuantity est supérieur à 0 et inférieur ou égal à 100 , choiceQuantity est un entier. puis le code est éxécuté
-    if (
-      choiceColor !== "" &&
-      choiceQuantity > 0 &&
-      choiceQuantity <= 100 &&
+    if (choiceColor !== "" && choiceQuantity > 0 && choiceQuantity <= 100 &&
       Number.isInteger(choiceQuantity)
     ) {
       let optionsProduct = {
@@ -103,7 +101,6 @@ function addProductEvent(product) {
           }
         } else {
           messageLocalStorage = true;
-
           produitEnregistreDansLocalStorage.push(optionsProduct);
         }
         localStorage.setItem(

@@ -1,3 +1,4 @@
+
 // Variable articleItems, qui a pour fonction de stocker l'article avec son ID propre dans "#items".
 const articleItems = document.querySelector("#items");
 // utilisation de la fonction fetch() pour récuperer les données de l'API, then((response) => response.json()) extrait les données JSON.

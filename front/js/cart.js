@@ -1,3 +1,4 @@
+
 document.title = "Page Panier";
 let productRegisterInLocalStorage = JSON.parse(localStorage.getItem("produit"));
 const productsPositionHtml = document.getElementById("cart__items");
@@ -20,7 +21,7 @@ let errorFormulaireFirstName = true;
 let errorFormulaireLastName = true;
 let errorFormulaireAddress = true;
 let errorFormulaireCity = true;
-let errorFormulaireEmail = true;
+let errorFormulaireEmail = true;  
 
 function totalProductsQuantity() {
   totalQuantity += parseInt(quantityProductPanier);

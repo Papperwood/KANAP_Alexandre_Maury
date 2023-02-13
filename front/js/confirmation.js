@@ -1,3 +1,4 @@
+
 //_________________Récupération de la chaîne de requête dans l'URL et Extraction de l'orderId (numéro de commande) de l'URL_______________________
 const urlOrderId = new URLSearchParams(window.location.search).get("orderId");
 
