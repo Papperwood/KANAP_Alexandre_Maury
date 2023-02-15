@@ -1,142 +1,88 @@
-// création de la variable kanapId qui en utilisant window.location.search va prend l'Id du produit.
-const kanapId = new URLSearchParams(window.location.search).get("id");
-console.log(kanapId);
-// if vérifie si la valeur de kanapId n'est pas nulle. Si la valeur n'est pas nulle, la valeur a sera enregistrée dans kanapId.
-if (kanapId !== null) {
-  // utilisation de la méthode fetch() pour récuperer les données de l'API ${kanapId} est la valeur stockée dans kanapId.
-  fetch(`http://localhost:3000/api/products/${kanapId}`)
-    .then((response) => response.json())
-    .then((product) => {
-      // création de l'article (balise html) puis récuperation des données de l'Api pour les mettres en forme
-      console.log(product);
-      displayproduct(product);
-      // création de la variable buttonPanier
-      addProductEvent(product);
-    })
-    // Gestion de possible erreur de l'opération fetch() ci dessus en utilisant catch
-    .catch((err) => {
-      console.log(
-        "Erreur Fetch product.js : l'id du produit est incorrect.",
-        err
-      );
-      alert(`Le produit sélectionné n'a pas été trouvé !`);
-      window.location.href = "index.html";
-    });
+// 'new URL(location.href)' crée un nouvel URLobjet basé sur l'URL de la page actuelle. 
+let url = new URL(location.href); 
+// url.searchParams.get("id") récupère la valeur du paramètre "id"
+let kanapPageId = url.searchParams.get("id"); 
 
-  // if (kanapId !== null) n'est pas passé donc le produit ne sera pas afficher alors message d'erreur
-} else {
-  console.log("L'id du produit n'a pas été indiqué dans l'url.");
-  alert(`Le produit sélectionné est introuvable !`);
-  window.location.href = "index.html";
-}
+const a = document.querySelector(".item__img"); // On récupère l'élément <img> qui contient l'image
+const b = document.querySelector("#title"); // On récupère l'élément <h1> qui contient le titre
+const c = document.querySelector("#price");	// On récupère l'élément <h1> qui contient le prix		
+const d = document.querySelector("#description"); // On récupère l'élément qui contient la description
+const e = document.querySelector("#colors"); // On récupère l'élément qui contient les couleurs
+const f = document.querySelector("#quantity"); // On récupère l'élément qui contient la quantité
 
-function displayproduct(product) {
-  const img = document.createElement("img");
-  img.alt = product.altTxt;
-  img.src = product.imageUrl;
-  document.getElementsByClassName("item__img")[0].appendChild(img);
-  document.getElementById("title").innerText = product.name;
-  document.getElementById("price").innerText = product.price + " ";
-  document.getElementById("description").innerText = product.description;
-  // boucle de type forEach, definition de la couleur dans le selecteur de la page product
-  const select = document.getElementById("colors");
-  product.colors.forEach((color) => {
-    const option = document.createElement("option");
-    option.value = color;
-    option.innerText = color;
-    select.appendChild(option);
-  });
-}
+fetch(`http://localhost:3000/api/products/${kanapPageId}`) // On récupère l'élément
+	.then((res) => res.json()) // On récupère la réponse
+	.then((object) => { // On récupère l'objet JSON
+		const imgKanap = object.imageUrl; // On récupère l'url de l'image
+		const nameKanap = object.name; // On récupère le nom de l'image
+		const priceKanap = object.price; // On récupère le prix de l'image
+		const descriptionKanap = object.description; // On récupère la description de l'image
+		const colorsKanap = object.colors; // On récupère les couleurs de l'image
 
-function addProductEvent(product) {
-  const buttonPanier = document.querySelector("#addToCart");
-  const select = document.getElementById("colors");
-  buttonPanier.addEventListener("click", (event) => {
-    event.preventDefault();
-    
-    // colorId stock la couleur de l'Id qui sort de #colors avec la méthode document.querySelector
-    const choiceColor = select.value;
-    // quantity stock la quantité de l'Id qui sort de #quantity avec la méthode document.querySelector
-    const quantity = document.querySelector("#quantity");
-    const choiceQuantity = Number(quantity.value);
-    console.log(choiceQuantity);
-    // vérification choiceColor n'est pas une chaîne vide, choiceQuantity est supérieur à 0 et inférieur ou égal à 100 , choiceQuantity est un entier. puis le code est éxécuté
-    if (choiceColor !== "" && choiceQuantity > 0 && choiceQuantity <= 100 &&
-      Number.isInteger(choiceQuantity)
-    ) {
-      let optionsProduct = {
-        idProduct: product._id,
-        colorProduct: choiceColor,
-        quantityProduct: choiceQuantity,
-      };
-      console.log(optionsProduct);
-      // messageLocalStorage ci dessous permet d'afficher un message dynamique qui va grace à ${product.name} et ${choiceColor} donner le bon produit et la bonne couleur
-      let messageLocalStorage = false;
-      const addProductLocalStorage = () => {
-        let findProduct = produitEnregistreDansLocalStorage.find((x) => {
-          return (
-            x.idProduct === optionsProduct.idProduct &&
-            x.colorProduct === optionsProduct.colorProduct
-          );
-        });
-        if (findProduct) {
-          const total =
-            Number(findProduct.quantityProduct) +
-            Number(optionsProduct.quantityProduct);
-          if (total <= 100) {
-            messageLocalStorage = false;
-            findProduct.quantityProduct =
-              Number(findProduct.quantityProduct) +
-              Number(optionsProduct.quantityProduct);
-            // if bien éxecuté donc message de validation
-            alert(
-              `La quantité du produit ${product.name} de couleur ${choiceColor} a bien été mise à jour.`
-            );
-          } else {
-            messageLocalStorage = false;
-            // if non éxecuté donc alert pour client
-            alert(
-              "La quantité d'un article (même référence et même couleur) ne peut pas dépasser 100. Merci de rectifier la quantité choisie."
-            );
-          }
-        } else {
-          messageLocalStorage = true;
-          produitEnregistreDansLocalStorage.push(optionsProduct);
-        }
-        localStorage.setItem(
-          "produit",
-          JSON.stringify(produitEnregistreDansLocalStorage)
-        );
-      };
-      let produitEnregistreDansLocalStorage = JSON.parse(
-        localStorage.getItem("produit")
-      );
 
-      if (produitEnregistreDansLocalStorage) {
-        addProductLocalStorage();
-        console.log(produitEnregistreDansLocalStorage);
-      } else {
-        produitEnregistreDansLocalStorage = [];
-        addProductLocalStorage();
-        console.log(produitEnregistreDansLocalStorage);
+		for (let couleur of colorsKanap) { // On récupère tous les couleurs de l'image
+			e.innerHTML += `<option value="${couleur}">${couleur}</option>`; // On ajoute les couleurs dans le select
+		}
+		a.innerHTML += `<img src="${imgKanap}" alt="Photographie d'un canapé">`; // On ajoute l'image dans l'élément <img>
+		b.innerText += `${nameKanap}`; // On ajoute le nom de l'image dans le h1
+		c.innerText += `${priceKanap} `; // On ajoute le nom de l'image 
+		d.innerText += `${descriptionKanap}`; // On ajoute la description du Kanap
 
-        messageLocalStorage = false;
-        alert(
-          `Félicitations !! Vous venez d'ajouter votre premier produit dans le panier ! `
-        );
-      }
-
-      if (messageLocalStorage) {
-        alert(
-          `Le produit ${product.name} de couleur ${choiceColor} a bien été ajouté au panier.`
-        );
-      }
-    }
-    // sinon message d'erreur qui répond au if
-    else {
-      alert(
-        `La couleur n'est pas sélectionnée et/ou la quantité n'est pas comprise entre 1 et 100. Veuillez vérifier !`
-      );
-    }
-  });
-}
+		// variable button à qui on affecte le résultat de l'appel de 'document.getElementById()'
+		const button = document.getElementById("addToCart");
+		// // Ajout de addEventlistener sur le bouton 'addToCart' par un click
+		button.addEventListener("click", () => { 
+			// basketValue est l'objet qui contient les données du Kanap en question
+			let basketValue = { 
+				idSelectedProduct: kanapPageId,
+				nameSelectedProduct: nameKanap,
+				colorSelectedProduct: e.value,
+				quantity: f.value
+			};
+			// mise en place de getBasket 
+			function getBasket() {
+				let basketValue = JSON.parse(localStorage.getItem("kanapLs")); // On récupère la valeur de "kanapLs" dans l'objet ci dessus
+				if (basketValue === null) {
+					return [];			// Si la valeur de "basketValue" est vide, retourne un tableau vide
+				} else {
+					return basketValue // Sinon retourne valeur de l'objet "basketValue"
+				}
+			}
+			// 
+			function addBasket(product) {
+				let basketValue = getBasket(); // On récupère la valeur de "basketValue" dans l'objet 
+				let foundProducts = basketValue.find( // méthode 'find' pour rechercher et retourner le produit 
+					(item) => // 
+						item.idSelectedProduct === product.idSelectedProduct && item.colorSelectedProduct === product.colorSelectedProduct	
+					); 
+				if (
+						foundProducts == undefined && e.value != "" &&	f.value > 0 && f.value <= 100 // Si le produit n'est pas trouvé dans la liste de produits,
+					) {
+						product.quantity = f.value;  // On ajoute la quantité de l'image
+						basketValue.push(product);	// méthode push ajoute le produit dans la liste de produits				 
+				} else {
+					let newQuantity = parseInt(foundProducts.quantity) + parseInt(f.value); // On ajoute la quantité de l'image
+					foundProducts.quantity = newQuantity; // On met à jour la quantité de l'image
+					}
+					saveBasket(basketValue);
+					alert( // mise en place de l'alerte
+						`Le canapé ${nameKanap} ${e.value} a été ajouté en ${f.value} exemplaires à votre panier !` // message dynamique avec ${} pour le nom , le prix et la quantité
+					);
+			}
+			function saveBasket(basketValue) { // On met à jour la quantité de l'image
+				localStorage.setItem("kanapLs", JSON.stringify(basketValue)); // On met à jour la valeur de "basketValue" dans l'objet
+			}
+			if (e.value === "") { // Si la couleur non selctionnée est vid
+				alert("Veuillez choisir une des couleur disponible.");
+			}
+			else if ( f.value <= 0 || f.value > 100) { // Si la quantité est invalide
+				alert("Veuillez sélectionner une quantité comprise entre 1 et 100.");
+			} else {
+				addBasket(basketValue); // On ajoute le produit dans la liste de produits
+			}
+		});
+	})
+	// méthode catch pour récupérer les erreurs dans la console si feet echoue
+	.catch(function (err) {
+		console.log(err);
+	});

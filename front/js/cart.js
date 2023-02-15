@@ -1,4 +1,4 @@
-
+// original
 document.title = "Page Panier";
 let productRegisterInLocalStorage = JSON.parse(localStorage.getItem("produit"));
 const productsPositionHtml = document.getElementById("cart__items");
