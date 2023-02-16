@@ -140,7 +140,7 @@ function emptyCart() {
 	const cartTitle = document.querySelector( // selection de l'input 
 		"#limitedWidthBlock div.cartAndFormContainer > h1"
 	); 
-	const emptyCartMessage = "Oups ! Votre panier est vide !"; //  variable qui contient le message d'erreur
+	const emptyCartMessage = "Retournez à la Boutique, Votre panier est vide !"; //  variable qui contient le message d'erreur
 	cartTitle.textContent = emptyCartMessage; // affichage du message d'erreur
 	cartTitle.style.fontSize = "40px";
 

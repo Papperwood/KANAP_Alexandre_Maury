@@ -32,26 +32,26 @@ fetch(`http://localhost:3000/api/products/${kanapPageId}`) // On récupère l'é
 		const button = document.getElementById("addToCart");
 		// // Ajout de addEventlistener sur le bouton 'addToCart' par un click
 		button.addEventListener("click", () => { 
-			// basketValue est l'objet qui contient les données du Kanap en question
-			let basketValue = { 
+			// cartValue est l'objet qui contient les données du Kanap en question
+			let cartValue = { 
 				idSelectedProduct: kanapPageId,
 				nameSelectedProduct: nameKanap,
 				colorSelectedProduct: e.value,
 				quantity: f.value
 			};
-			// mise en place de getBasket 
-			function getBasket() {
-				let basketValue = JSON.parse(localStorage.getItem("kanapLs")); // On récupère la valeur de "kanapLs" dans l'objet ci dessus
-				if (basketValue === null) {
-					return [];			// Si la valeur de "basketValue" est vide, retourne un tableau vide
+			// mise en place de getCart 
+			function getCart() {
+				let cartValue = JSON.parse(localStorage.getItem("kanapLs")); // On récupère la valeur de "kanapLs" dans l'objet ci dessus
+				if (cartValue === null) {
+					return [];			// Si la valeur de "cartValue" est vide, retourne un tableau vide
 				} else {
-					return basketValue // Sinon retourne valeur de l'objet "basketValue"
+					return cartValue // Sinon retourne valeur de l'objet "cartValue"
 				}
 			}
-			// 
-			function addBasket(product) {
-				let basketValue = getBasket(); // On récupère la valeur de "basketValue" dans l'objet 
-				let foundProducts = basketValue.find( // méthode 'find' pour rechercher et retourner le produit 
+
+			function addCart(product) {
+				let cartValue = getCart(); // On récupère la valeur de "cartValue" dans l'objet 
+				let foundProducts = cartValue.find( // méthode 'find' pour rechercher et retourner le produit 
 					(item) => // 
 						item.idSelectedProduct === product.idSelectedProduct && item.colorSelectedProduct === product.colorSelectedProduct	
 					); 
@@ -59,18 +59,18 @@ fetch(`http://localhost:3000/api/products/${kanapPageId}`) // On récupère l'é
 						foundProducts == undefined && e.value != "" &&	f.value > 0 && f.value <= 100 // Si le produit n'est pas trouvé dans la liste de produits,
 					) {
 						product.quantity = f.value;  // On ajoute la quantité de l'image
-						basketValue.push(product);	// méthode push ajoute le produit dans la liste de produits				 
+						cartValue.push(product);	// méthode push ajoute le produit dans la liste de produits				 
 				} else {
 					let newQuantity = parseInt(foundProducts.quantity) + parseInt(f.value); // On ajoute la quantité de l'image
 					foundProducts.quantity = newQuantity; // On met à jour la quantité de l'image
 					}
-					saveBasket(basketValue);
+					saveCart(cartValue);
 					alert( // mise en place de l'alerte
 						`Le canapé ${nameKanap} ${e.value} a été ajouté en ${f.value} exemplaires à votre panier !` // message dynamique avec ${} pour le nom , le prix et la quantité
 					);
 			}
-			function saveBasket(basketValue) { // On met à jour la quantité de l'image
-				localStorage.setItem("kanapLs", JSON.stringify(basketValue)); // On met à jour la valeur de "basketValue" dans l'objet
+			function saveCart(cartValue) { // On met à jour la quantité de l'image
+				localStorage.setItem("kanapLs", JSON.stringify(cartValue)); // On met à jour la valeur de "cartValue" dans l'objet
 			}
 			if (e.value === "") { // Si la couleur non selctionnée est vid
 				alert("Veuillez choisir une des couleur disponible.");
@@ -78,7 +78,7 @@ fetch(`http://localhost:3000/api/products/${kanapPageId}`) // On récupère l'é
 			else if ( f.value <= 0 || f.value > 100) { // Si la quantité est invalide
 				alert("Veuillez sélectionner une quantité comprise entre 1 et 100.");
 			} else {
-				addBasket(basketValue); // On ajoute le produit dans la liste de produits
+				addCart(cartValue); // On ajoute le produit dans la liste de produits
 			}
 		});
 	})
