@@ -1,6 +1,5 @@
 const cart = getCart(); // recuperation de la valeur du localStorage
-function getCart() {
-  // appel de la fonction getCart pour récupérer les données
+function getCart() {  // appel de la fonction getCart pour récupérer les données
   return JSON.parse(localStorage.getItem("kanapLs")); // retourne le tableau de toutes les données de l'api
 }
 
@@ -99,10 +98,9 @@ async function modifyQuantity() {
       if (input.value > 0) {
         // si la quantité est supérieure à 0
         findColor.quantity = input.value; // on modifie la quantité de l'article modifié
-        // appel de la fonction calculPrixTotal pour récupérer le prix total
       }
       calculQteTotale(); // appel de la fonction calculQteTotale pour récupérer la quantité total ligne 153
-      calculPrixTotal();
+      calculPrixTotal(); // appel de la fonction calculPrixTotal pour récupérer le prix total
       localStorage.setItem("kanapLs", JSON.stringify(cart));
     });
   }
@@ -145,13 +143,10 @@ async function suppressKanap() {
 // Panier Vide
 function emptyCart() {
   const cartTitle = document.querySelector(
-    // selection de l'input
     "#limitedWidthBlock div.cartAndFormContainer > h1"
-  );
+  ); // selection de l'input
   const emptyCartMessage = "Retournez à la Boutique, Votre panier est vide !"; //  variable qui contient le message d'erreur
   cartTitle.textContent = emptyCartMessage; // affichage du message d'erreur
-  cartTitle.style.fontSize = "40px";
-
   document.querySelector(".cart__order").style.display = "none";
   document.querySelector(".cart__price").style.display = "none";
 }

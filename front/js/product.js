@@ -40,6 +40,7 @@ fetch(`http://localhost:3000/api/products/${kanapPageId}`) // On récupère l'é
         colorSelectedProduct: colorsElt.value,
         quantity: quantityElt.value,
       };
+
       // mise en place de getCart
       function getCart() {
         let cartValue = JSON.parse(localStorage.getItem("kanapLs")); // On récupère la valeur de "kanapLs" dans l'objet ci dessus
@@ -79,12 +80,11 @@ fetch(`http://localhost:3000/api/products/${kanapPageId}`) // On récupère l'é
           `Le canapé ${nameKanap} ${colorsElt.value} a été ajouté en ${quantityElt.value} exemplaires à votre panier !` // message dynamique avec ${} pour le nom , le prix et la quantité
         );
       }
-      function saveCart(cartValue) {
-        // On met à jour la quantité de l'image
+      function saveCart(cartValue) { // On met à jour la quantité de l'image
         localStorage.setItem("kanapLs", JSON.stringify(cartValue)); // On met à jour la valeur de "cartValue" dans l'objet
       }
       if (colorsElt.value === "") {
-        // Si la couleur non selctionnée est vid
+        // Si la couleur non selctionnée est vide
         alert("Veuillez choisir une des couleur disponible.");
       } else if (quantityElt.value <= 0 || quantityElt.value > 100) {
         // Si la quantité est invalide
